@@ -1,25 +1,53 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const [input, setInput] = useState("");
+    const todos = useSelector((state) => state.todos);
+    const dispatch = useDispatch();
+
+    const addTodo = () => {
+        if (input.trim() === "") return;
+        dispatch({ type: "ADD_TODO", payload: input });
+        setInput("");
+    };
+
+    return (
+        <div style={{ background: "skyblue", padding: "20px", minHeight: "100vh" }}>
+            <h2>TODO</h2>
+            <div style={{ marginBottom: "20px" }}>
+                <input
+                    type="text"
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    style={{ padding: "5px", width: "250px" }}
+                />
+                <button onClick={addTodo} style={{ marginLeft: "10px" }}>
+                    Добавить
+                </button>
+            </div>
+
+            <h3>TODOS</h3>
+            <ul style={{ listStyle: "none", padding: 0 }}>
+                {todos.map((todo, index) => (
+                    <li
+                        key={index}
+                        style={{
+                            background: "moccasin",
+                            marginBottom: "10px",
+                            padding: "10px",
+                            borderRadius: "8px",
+                            boxShadow: "1px 1px 2px rgba(0,0,0,0.2)"
+                        }}
+                    >
+                        {todo}
+                    </li>
+                ))}
+            </ul>
+
+            <p>Всего: {todos.length}</p>
+        </div>
+    );
 }
 
 export default App;
